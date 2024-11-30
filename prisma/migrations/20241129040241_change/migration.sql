@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Channel" ALTER COLUMN "status" SET DEFAULT 'ACTIVE',
+ALTER COLUMN "type" SET DEFAULT 'OTHER';

@@ -1,0 +1,5 @@
+export * from './application'
+export * from './domain'
+export * from './infrastructure'
+export * from './api/rest/controllers/asset.controller'
+export * from './asset.module'

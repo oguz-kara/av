@@ -1,0 +1,181 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ChannelStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum ChannelType {
+  RETAIL
+  B2B
+  MARKETPLACE
+  LOCALE
+  OTHER
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+enum UserActiveStatus {
+  INACTIVE
+  ACTIVE
+  BANNED
+  FRAUD
+  NOT_VERIFIED
+}
+
+enum ResourceType {
+  USER
+  ROLE
+  PERMISSION
+  CATEGORY
+  ARTICLE
+}
+
+model Channel {
+  id                  Int           @id @default(autoincrement())
+  name                String
+  code                String        @unique
+  token               String        @unique
+  defaultLanguageCode String
+  currencyCode        String
+  isDefault           Boolean       @default(false)
+  status              ChannelStatus @default(ACTIVE)
+  type                ChannelType   @default(OTHER)
+
+  deletedAt DateTime?
+  deletedBy String?
+  createdBy String
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([token])
+  @@index([code])
+}
+
+model Product {
+  id              String  @id @default(uuid())
+  featuredAssetId String?
+
+  name         String
+  slug         String?
+  description  String?
+  draft        Boolean @default(true)
+  channelToken String
+
+  featuredAsset      Asset?              @relation(name: "ProductFeaturedImage", fields: [featuredAssetId], references: [id])
+  assets             Asset[]             @relation("ProductAssets")
+  facetValues        FacetValue[]        @relation("ProductFacetValues")
+  productCollections ProductCollection[] @relation("CollectionProducts")
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  updatedBy String?
+  createdBy String?
+  deletedAt DateTime?
+  deletedBy String?
+}
+
+model ProductCollection {
+  id String @id @default(uuid())
+
+  name         String  @unique
+  slug         String? @unique
+  description  String?
+  channelToken String
+
+  isDynamic Boolean @default(false)
+
+  products Product[] @relation("CollectionProducts")
+
+  rules Json?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+}
+
+model Asset {
+  id String @id @default(uuid())
+
+  originalName    String
+  name            String
+  type            AssetType
+  mimeType        String
+  fileSize        Int
+  source          String
+  preview         String?
+  storageProvider String?
+  channelToken    String
+
+  width      Int?  @default(0)
+  height     Int?  @default(0)
+  focalPoint Json?
+
+  productFeaturedImages Product[] @relation("ProductFeaturedImage")
+  productAssets         Product[] @relation("ProductAssets")
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  updatedBy String?
+  createdBy String?
+  deletedAt DateTime?
+  deletedBy String?
+}
+
+model Facet {
+  id String @id @default(uuid())
+
+  name         String
+  code         String
+  isPrivate    Boolean @default(false)
+  channelToken String
+
+  values FacetValue[]
+
+  createdAt DateTime? @default(now())
+  createdBy String?
+  updatedAt DateTime? @updatedAt
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+}
+
+model FacetValue {
+  id      String @id @default(uuid())
+  facetId String
+
+  name         String
+  code         String
+  channelToken String
+
+  facet    Facet     @relation(fields: [facetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  products Product[] @relation("ProductFacetValues")
+
+  createdAt DateTime? @default(now())
+  createdBy String?
+  updatedAt DateTime? @updatedAt
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+
+  @@unique([facetId, name])
+  @@unique([facetId, code])
+}

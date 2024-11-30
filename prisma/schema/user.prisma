@@ -1,0 +1,86 @@
+enum ActionType {
+    READ
+    WRITE
+    DELETE
+    UPDATE
+    ALL
+}
+
+enum ScopeType {
+    SELF
+    GLOBAL
+}
+
+enum PermissionType {
+    GLOBAL
+}
+
+model User {
+    id              String  @id @default(uuid())
+    roleId          String
+    oauthProviderId String?
+
+    email                  String  @unique
+    passwordHash           String
+    emailVerificationToken String?
+    resetPasswordToken     String?
+    oauthProvider          String?
+    twoFactorSecret        String?
+
+    twoFactorEnabled Boolean @default(false)
+    emailVerified    Boolean @default(false)
+
+    isActive UserActiveStatus @default(INACTIVE)
+
+    role Role @relation(fields: [roleId], references: [id])
+
+    resetPasswordExpires DateTime?
+    lastLogin            DateTime?
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+    updatedBy            String?
+    createdBy            String?
+    deletedAt            DateTime?
+    deletedBy            String?
+
+    @@index([email])
+    @@index([roleId])
+}
+
+model Role {
+    id String @id @default(uuid())
+
+    name         String @unique
+    channelToken String
+
+    users       User[]
+    permissions Permission[]
+
+    createdAt DateTime? @default(now())
+    createdBy String?
+    updatedAt DateTime? @updatedAt
+    updatedBy String?
+    deletedAt DateTime?
+    deletedBy String?
+}
+
+model Permission {
+    id              String  @id @default(uuid())
+    specificScopeId String?
+
+    resource       ResourceType
+    action         ActionType
+    scope          ScopeType
+    permissionType PermissionType @default(value: GLOBAL)
+
+    roles Role[]
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+    createdBy String?
+    updatedBy String?
+    deletedAt DateTime?
+    deletedBy String?
+
+    @@unique([action, resource, scope])
+}

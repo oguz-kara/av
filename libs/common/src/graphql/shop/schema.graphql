@@ -1,0 +1,9 @@
+type Query {
+  hello: AssetMessage!
+}
+
+type AssetMessage {
+  message: String!
+}
+
+scalar DateTime

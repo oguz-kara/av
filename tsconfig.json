@@ -1,0 +1,71 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@av/channel": [
+        "libs/channel/src"
+      ],
+      "@av/channel/*": [
+        "libs/channel/src/*"
+      ],
+      "@av/request-context": [
+        "libs/request-context/src"
+      ],
+      "@av/request-context/*": [
+        "libs/request-context/src/*"
+      ],
+      "@av/product": [
+        "libs/product/src"
+      ],
+      "@av/product/*": [
+        "libs/product/src/*"
+      ],
+      "@av/gateway": [
+        "libs/gateway/src"
+      ],
+      "@av/gateway/*": [
+        "libs/gateway/src/*"
+      ],
+      "@av/common": [
+        "libs/common/src"
+      ],
+      "@av/common/*": [
+        "libs/common/src/*"
+      ],
+      "@av/asset": [
+        "libs/asset/src"
+      ],
+      "@av/asset/*": [
+        "libs/asset/src/*"
+      ],
+      "@av/database": [
+        "libs/database/src"
+      ],
+      "@av/database/*": [
+        "libs/database/src/*"
+      ],
+      "@av/user": [
+        "libs/user/src"
+      ],
+      "@av/user/*": [
+        "libs/user/src/*"
+      ]
+    }
+  }
+}

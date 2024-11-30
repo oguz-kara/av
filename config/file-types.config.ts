@@ -1,0 +1,32 @@
+export const supportedTypes = {
+  IMAGE: [
+    'image/webp',
+    'image/avif',
+    'image/jpeg',
+    'image/jpg',
+    'image/gif',
+    'image/png',
+  ],
+  DOCUMENT: [
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/pdf',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/plain',
+    'text/csv',
+    'text/plain',
+  ],
+  VIDEO: ['video/mp4'],
+  AUDIO: [
+    'audio/mpeg',
+    'audio/wav',
+    'audio/ogg',
+    'audio/flac',
+    'audio/aac',
+    'audio/mp4',
+    'audio/x-m4a',
+  ],
+}

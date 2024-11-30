@@ -1,0 +1,31 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@av/channel/(.*)": "<rootDir>/../libs/channel/src/$1",
+    "@av/channel": "<rootDir>/../libs/channel/src",
+    "@av/request-context/(.*)": "<rootDir>/../libs/request-context/src/$1",
+    "@av/request-context": "<rootDir>/../libs/request-context/src",
+    "@av/product/(.*)": "<rootDir>/../libs/product/src/$1",
+    "@av/product": "<rootDir>/../libs/product/src",
+    "@av/gateway/(.*)": "<rootDir>/../libs/gateway/src/$1",
+    "@av/gateway": "<rootDir>/../libs/gateway/src",
+    "@av/common/(.*)": "<rootDir>/../libs/common/src/$1",
+    "@av/common": "<rootDir>/../libs/common/src",
+    "@av/asset/(.*)": "<rootDir>/../libs/asset/src/$1",
+    "@av/asset": "<rootDir>/../libs/asset/src",
+    "@av/database/(.*)": "<rootDir>/../libs/database/src/$1",
+    "@av/database": "<rootDir>/../libs/database/src",
+    "@av/user/(.*)": "<rootDir>/../libs/user/src/$1",
+    "@av/user": "<rootDir>/../libs/user/src"
+  }
+}

@@ -1,0 +1,284 @@
+type PaginatedResponseMeta {
+  take: Int!
+  skip: Int!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: String!
+  updatedBy: String
+}
+
+scalar DateTime
+
+type FindProductsResponse {
+  items: [Product!]!
+  pagination: PaginatedResponseMeta!
+}
+
+type Channel {
+  id: Int!
+  code: String!
+  name: String!
+  token: String!
+  isDefault: Boolean!
+  type: String!
+  currencyCode: String!
+  defaultLanguageCode: String!
+  createdBy: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Permission {
+  id: String!
+  specificScopeId: String
+  name: String!
+  action: String!
+  resource: String!
+  scope: String!
+  createdBy: String
+  updatedBy: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+type FindPermissionsResponseType {
+  items: [Permission!]!
+  pagination: PaginatedResponseMeta!
+}
+
+type Role {
+  id: ID!
+  name: String!
+  channelToken: String
+}
+
+type CreateRoleResponse {
+  id: ID!
+  name: String!
+}
+
+type FindRolesResponseType {
+  items: [Role!]!
+  pagination: PaginatedResponseMeta!
+}
+
+type UserType {
+  id: ID!
+  roleId: ID!
+  email: String!
+  isActive: String!
+  emailVerified: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  createdBy: String!
+  updatedBy: String
+  deletedBy: String
+}
+
+type FindUsersResponseType {
+  items: [UserType!]!
+  pagination: PaginatedResponseMeta!
+}
+
+type AuthenticateUserSuccess {
+  token: String!
+}
+
+type CreateUserAccountSuccess {
+  id: ID!
+  roleId: ID!
+  email: String!
+  isActive: String!
+  emailVerified: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  createdBy: String!
+  updatedBy: String
+  deletedBy: String
+}
+
+type Query {
+  permissions(input: PaginationInput): FindPermissionsResponseType!
+  findPermissionById(input: IDInput!): Permission
+  roles(input: PaginationInput): FindRolesResponseType!
+  findRoleById(id: String!): Role
+  users(input: PaginationInput): FindUsersResponseType!
+  findUserById(input: IDInput!): UserType
+  findUserByEmail(input: EmailInput!): UserType
+  products(pagination: PaginationInput!): FindProductsResponse!
+  product(id: String!): Product!
+  searchProducts(query: String!, skip: Int, take: Int): PaginatedResponseMeta!
+  channels: [Channel!]!
+  channel(id: Int!): Channel!
+  getOrCreateDefaultChannel(token: String!): Channel!
+}
+
+input PaginationInput {
+  take: Float!
+  skip: Float!
+}
+
+input IDInput {
+  id: String!
+}
+
+input EmailInput {
+  email: String!
+}
+
+type Mutation {
+  authenticateUser(input: LoginUserDto!): AuthenticateUserSuccess!
+  createUserAccount(input: RegisterUserDto!): CreateUserAccountSuccess!
+  createPermission(input: CreatePermissionDto!): Permission!
+  editPermissionDetails(id: String!, input: UpdatePermissionDto!): Permission!
+  removePermissionById(input: IDInput!): Permission!
+  softRemovePermissionById(input: IDInput!): Permission!
+  recoverPermissionById(input: IDInput!): Permission!
+  createRole(input: CreateRoleDto!): CreateRoleResponse!
+  renameRoleById(input: RenameRoleDto!): Role!
+  removeRoleById(id: String!): Role!
+  setRolePermissions(input: SetRolePermissionsDto!): Role!
+  createUser(input: CreateUserDto!): UserType!
+  assignRoleToUser(input: AssignRoleInput!): UserType!
+  createProduct(input: CreateProductInput!): Product!
+  updateProduct(id: String!, input: UpdateProductInput!): Product!
+  deleteProduct(id: String!): Product!
+  createChannel(input: CreateChannelInput!): Channel!
+  updateChannel(id: Int!, input: UpdateChannelInput!): Channel!
+  deleteChannel(id: Int!): Channel!
+}
+
+input LoginUserDto {
+  email: String!
+  password: String!
+}
+
+input RegisterUserDto {
+  email: String!
+  password: String!
+  roleId: String!
+  isActive: UserActiveStatus!
+}
+
+"""
+The active status of a user
+"""
+enum UserActiveStatus {
+  ACTIVE
+  INACTIVE
+}
+
+input CreatePermissionDto {
+  specificScopeId: String
+  action: ActionType!
+  resource: ResourceType!
+  scope: ScopeType!
+  permissionType: ActionType
+}
+
+"""
+The type of permission action
+"""
+enum ActionType {
+  READ
+  WRITE
+  UPDATE
+  DELETE
+  ALL
+}
+
+"""
+The type of resource
+"""
+enum ResourceType {
+  USER
+  ROLE
+  PERMISSION
+  PRODUCT_CATEGORY
+  BLOG_POST_CATEGORY
+  BLOG_POST
+}
+
+"""
+The type of scope
+"""
+enum ScopeType {
+  GLOBAL
+  SELF
+}
+
+input UpdatePermissionDto {
+  specificScopeId: String
+  action: ActionType
+  resource: ResourceType
+  scope: ScopeType
+  permissionType: ActionType
+}
+
+input CreateRoleDto {
+  name: String!
+}
+
+input RenameRoleDto {
+  id: String!
+  name: String!
+}
+
+input SetRolePermissionsDto {
+  roleId: String!
+  permissionIds: [String!]!
+}
+
+input CreateUserDto {
+  email: String!
+  password: String!
+  roleId: String!
+  emailVerified: Boolean!
+  isActive: UserActiveStatus!
+}
+
+input AssignRoleInput {
+  userId: String!
+  roleId: String!
+}
+
+input CreateProductInput {
+  name: String!
+  slug: String!
+  description: String
+}
+
+input UpdateProductInput {
+  name: String
+  slug: String
+  description: String
+  price: Float
+}
+
+input CreateChannelInput {
+  code: String!
+  name: String!
+  isDefault: Boolean
+  type: String!
+  currencyCode: String!
+  defaultLanguageCode: String!
+}
+
+input UpdateChannelInput {
+  code: String
+  name: String
+  isDefault: Boolean
+  type: String
+  currencyCode: String
+  defaultLanguageCode: String
+}
